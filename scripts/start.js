@@ -14,7 +14,6 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
-
 const fs = require('fs');
 const chalk = require('chalk');
 const webpack = require('webpack');
@@ -27,6 +26,7 @@ const {
   prepareProxy,
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
+
 const openBrowser = require('react-dev-utils/openBrowser');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
@@ -52,18 +52,18 @@ if (process.env.HOST) {
       )}`
     )
   );
-  console.log(
-    `If this was unintentional, check that you haven't mistakenly set it in your shell.`
-  );
-  console.log(
-    `Learn more here: ${chalk.yellow('http://bit.ly/CRA-advanced-config')}`
-  );
+
+  console.log(`If this was unintentional, check that you haven't mistakenly set it in your shell.`);
+  console.log(`Learn more here: ${chalk.yellow('http://bit.ly/CRA-advanced-config')}`);
   console.log();
 }
 
 // We require that you explictly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require('react-dev-utils/browsersHelper');
+const {
+  checkBrowsers
+} = require('react-dev-utils/browsersHelper');
+
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // We attempt to use the default port but if it is busy, we offer the user to
@@ -75,6 +75,7 @@ checkBrowsers(paths.appPath, isInteractive)
       // We have not found a port.
       return;
     }
+
     const config = configFactory('development');
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
@@ -89,21 +90,23 @@ checkBrowsers(paths.appPath, isInteractive)
       proxyConfig,
       urls.lanUrlForConfig
     );
+
     const devServer = new WebpackDevServer(compiler, serverConfig);
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {
       if (err) {
         return console.log(err);
       }
+
       if (isInteractive) {
         clearConsole();
       }
+
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
     });
 
-    ['SIGINT', 'SIGTERM'].forEach(function(sig) {
-      process.on(sig, function() {
+    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+      process.on(sig, function () {
         devServer.close();
         process.exit();
       });
